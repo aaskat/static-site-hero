@@ -15,7 +15,13 @@ var insertText = (value) => {
         editBuilder.replace(range, value);
     });
 }
+let getImageTemplate = () => {
+    return vscode.workspace.getConfiguration("staticSiteHero")["imagePathTemplate"];
+}
+let getFileTemplate = () => {
+    return vscode.workspace.getConfiguration("staticSiteHero")["filePathTemplate"];
 
+}
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -36,9 +42,13 @@ function activate(context) {
             placeHolder: 'Link Type'
         }).then(
             result => {
-                insertText(result);
-            }
-        )
+                //insertText(result);
+                if (result === 'File') {
+                    insertText(getFileTemplate())
+                } else if (result === 'Image') {
+                    insertText(getImageTemplate())
+                }
+            });
     });
 
     context.subscriptions.push(fileLinkDisposable);
@@ -52,5 +62,5 @@ function activate(context) {
 exports.activate = activate;
 
 // this method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
 exports.deactivate = deactivate;
